@@ -1,4 +1,4 @@
-package com.creative.commons.logging.impl;
+package com.creative.commons.logging.loader;
 
 import java.net.URL;
 import java.net.URLClassLoader;

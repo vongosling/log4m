@@ -1,5 +1,6 @@
-package com.creative.commons.logging.impl;
+package com.creative.commons.logging.loader;
 
+import com.creative.commons.logging.LoggerWord;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
