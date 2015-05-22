@@ -1,2 +1,7 @@
 rootProject.name = 'log4m'
 
+include 'logger-word-api'
+findProject(':logger-word-api')?.name = 'logger.api'
+include 'logger-word-impl'
+findProject(':logger-word-impl')?.name = 'logger.impl'
+
