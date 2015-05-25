@@ -5,6 +5,11 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'idea'
+    apply plugin: 'propdeps'
+    apply plugin: 'propdeps-maven'
+    apply plugin: 'propdeps-idea'
+    apply plugin: 'propdeps-eclipse'
+
     repositories {
         mavenCentral()
     }
@@ -58,10 +63,9 @@ project("logger.api") {
 }
 
 project("logger.impl") {
-
     dependencies {
-        compile("commons-logging:commons-logging:1.1.1")
-        compile("log4j:log4j:1.2.17")
+        compile("commons-logging:commons-logging:1.2")
+        //compile("log4j:log4j:1.2.17")
         compile(project(":logger.api"))
     }
 }
@@ -90,4 +94,13 @@ dependencies {
     compile("log4j:log4j:1.2.17")
     compile("org.slf4j:slf4j-api:1.7.12")
     compile(project(":logger.impl"))
+}
+
+buildscript {
+    repositories {
+        maven { url 'http://repo.spring.io/plugins-release' }
+    }
+    dependencies {
+        classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'
+    }
 }

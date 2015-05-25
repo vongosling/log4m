@@ -6,31 +6,31 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.spi.LoggerFactory;
 
 import java.net.URL;
-import java.net.URLClassLoader;
 
 /**
  * @author Von Gosling
+ * @see <a href="http://articles.qos.ch/classloader.html">classloader</a>
  */
-public class TestJCL {
+public class ChildFirstTestJCL {
     public static void main(String[] args) throws Exception {
 
-        URLClassLoader childLoader = new URLClassLoader(new URL[]{LoggerWordImpl.class.getResource(LoggerWordImpl.class.getSimpleName() + ".class"),
+        ChildFirstLoader childLoader = new ChildFirstLoader(new URL[]{LoggerWordImpl.class.getResource(LoggerWordImpl.class.getSimpleName() + ".class"),
                 Log.class.getProtectionDomain().getCodeSource().getLocation(),
-                LoggerFactory.class.getProtectionDomain().getCodeSource().getLocation()}, TestJCL.class.getClassLoader());
+                LoggerFactory.class.getProtectionDomain().getCodeSource().getLocation()}, ChildFirstTestJCL.class.getClassLoader());
         System.out.println(LoggerWordImpl.class.getResource(LoggerWordImpl.class.getSimpleName() + ".class"));
         System.out.println(Log.class.getProtectionDomain().getCodeSource().getLocation());
         System.out.println(LoggerFactory.class.getProtectionDomain().getCodeSource().getLocation());
 
         System.out.println(Thread.currentThread().getContextClassLoader());
-        //Thread.currentThread().setContextClassLoader(childLoader);
+        Thread.currentThread().setContextClassLoader(childLoader);
+        System.out.println(Thread.currentThread().getContextClassLoader());
 
-        Log log = LogFactory.getLog(TestJCL.class);
-        log.info("Hello, " + TestJCL.class.getName());
+        Log log = LogFactory.getLog(ChildFirstTestJCL.class);
+        log.info("Hello, " + ChildFirstTestJCL.class.getName());
 
         Class<?> clazz = childLoader.loadClass(LoggerWordImpl.class.getName());
         LoggerWord lw = (LoggerWord) clazz.newInstance();
         lw.printWord();
-
 
     }
 }

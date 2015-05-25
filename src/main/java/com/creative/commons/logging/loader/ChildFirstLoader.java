@@ -23,7 +23,6 @@ public class ChildFirstLoader extends URLClassLoader {
         return url;
     }
 
-
     @Override
     protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
         synchronized (getClassLoadingLock(name)) {
