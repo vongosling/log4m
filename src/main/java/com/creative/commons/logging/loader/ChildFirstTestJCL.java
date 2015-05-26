@@ -13,7 +13,6 @@ import java.net.URL;
  */
 public class ChildFirstTestJCL {
     public static void main(String[] args) throws Exception {
-
         ChildFirstLoader childLoader = new ChildFirstLoader(new URL[]{LoggerWordImpl.class.getResource(LoggerWordImpl.class.getSimpleName() + ".class"),
                 Log.class.getProtectionDomain().getCodeSource().getLocation(),
                 LoggerFactory.class.getProtectionDomain().getCodeSource().getLocation()}, ChildFirstTestJCL.class.getClassLoader());
@@ -30,7 +29,6 @@ public class ChildFirstTestJCL {
 
         Class<?> clazz = childLoader.loadClass(LoggerWordImpl.class.getName());
         LoggerWord lw = (LoggerWord) clazz.newInstance();
-        lw.printWord();
-
+        lw.printWord("ronaldo");
     }
 }

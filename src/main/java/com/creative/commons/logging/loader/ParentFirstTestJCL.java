@@ -30,8 +30,6 @@ public class ParentFirstTestJCL {
 
         Class<?> clazz = childLoader.loadClass(LoggerWordImpl.class.getName());
         LoggerWord lw = (LoggerWord) clazz.newInstance();
-        lw.printWord();
-
-
+        lw.printWord("messi");
     }
 }
