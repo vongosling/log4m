@@ -31,7 +31,9 @@ allprojects {
         compile("com.google.guava:guava:18.0")
         compile("org.apache.commons:commons-lang3:3.4")
         compile("org.checkerframework:checker-qual:1.9.1")
-        compile("org.checkerframework:checker:1.9.1")
+        //compile("org.checkerframework:checker:1.9.1")
+        //compile("org.checkerframework:jdk8:1.9.1")
+        //compile("org.checkerframework:compiler:1.9.1")
     }
 
     compileJava.options*.compilerArgs = [
@@ -63,13 +65,15 @@ allprojects {
     tasks.withType(JavaCompile).all { JavaCompile compile ->
         compile.options.debug = true
         compile.options.compilerArgs = [
-                '-source','8',
-                '-target','8',
                 '-version',
                 '-implicit:class',
                 '-AprintErrorStack',
                 '-AprintAllQualifiers',
                 '-Awarns',
+                '-Alint=all',
+                '-AonlyUses=^com.creative\\.',
+                '-AskipDefs=^java\\.',
+                '-AskipUses=^java\\.',
                 //'-proc:none',
                 '-processor', 'org.checkerframework.checker.nullness.NullnessChecker'
         ]

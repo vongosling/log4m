@@ -18,7 +18,10 @@ public class ChildFirstLoader extends URLClassLoader {
     public URL getResource(String name) {
         URL url = findResource(name);
         if (url == null) {
-            url = getParent().getResource(name);
+            ClassLoader pLoader = getParent();
+            if(pLoader != null){
+                url = pLoader.getResource(name);
+            }
         }
         return url;
     }
@@ -39,8 +42,9 @@ public class ChildFirstLoader extends URLClassLoader {
 
                 // If still not found, delegate to parent
                 if (c == null) {
-                    if (getParent() != null) {
-                        c = getParent().loadClass(name);
+                    ClassLoader pLoader = getParent();
+                    if (pLoader != null) {
+                        c = pLoader.loadClass(name);
                     } else {
                         c = getSystemClassLoader().loadClass(name);
                     }

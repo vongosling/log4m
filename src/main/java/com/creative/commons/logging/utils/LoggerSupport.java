@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.Map;
 
 /**
  * @author Von Gosling
@@ -23,8 +22,7 @@ public abstract class LoggerSupport {
     private static final String LOG4J_CONFIG_PROP = "org.apache.log4j.PropertyConfigurator";
     private static final String LOGBACK_FACTORY = "ch.qos.logback.classic.LoggerContext";
 
-    public static void resetLogger(@SuppressWarnings("rawtypes") Map conf) {
-        String logFile = (String) conf.get("storm.client.logger");
+    public static void resetLogger(String logFile) {
         if (StringUtils.isBlank(logFile)) {
             LOG.error("Null value for storm.client.logger configuration item !");
             return;
@@ -54,7 +52,7 @@ public abstract class LoggerSupport {
                 }
 
                 Method configureMethod = configurator.getMethod("configure", URL.class);
-                URL url = Thread.currentThread().getContextClassLoader().getResource(logFile);
+                URL url = getContextClassLoader().getResource(logFile);
                 configureMethod.invoke(configurator.newInstance(), url);
             } else if (LOGBACK_FACTORY.equals(classType.getName())) {
                 //configurator.setContext(context);
@@ -72,7 +70,7 @@ public abstract class LoggerSupport {
                 reset.invoke(contextObj);
 
                 //configurator.doConfigure("logback.xml");
-                URL url = Thread.currentThread().getContextClassLoader().getResource(logFile);
+                URL url = getContextClassLoader().getResource(logFile);
                 Method doConfigure = joranConfiguratoroObj.getClass().getMethod("doConfigure",
                         URL.class);
                 doConfigure.invoke(joranConfiguratoroObj, url);
@@ -80,4 +78,18 @@ public abstract class LoggerSupport {
         } catch (Exception e) {
             LOG.error("Initializing  custom log configuration error !", e);
         }
-    }}
+    }
+
+    protected static ClassLoader getContextClassLoader() {
+        ClassLoader classLoader = null;
+
+        try {
+            classLoader = Thread.currentThread().getContextClassLoader();
+        } catch (SecurityException ex) {
+            // ignore
+        }
+
+        // Return the selected class loader
+        return classLoader;
+    }
+}
